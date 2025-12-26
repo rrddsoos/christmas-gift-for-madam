@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Surprise ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+
+        :root {
+            --xmas-red: #d42426;
+            --xmas-green: #165b33;
+            --soft-white: #f8f9fa;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #165b33 0%, #d42426 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* --- FLOATING HEARTS BACKGROUND --- */
+        .bg-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .heart-bg {
+            position: absolute;
+            bottom: -10vh;
+            background-color: rgba(255, 255, 255, 0.5);
+            height: 25px;
+            width: 25px;
+            transform: rotate(-45deg);
+            animation: float 7s infinite ease-in;
+        }
+        .heart-bg:before, .heart-bg:after {
+            content: "";
+            position: absolute;
+            background-color: inherit;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+        .heart-bg:before { top: -12px; left: 0; }
+        .heart-bg:after { left: 12px; top: 0; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(-45deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(-45deg); opacity: 0; }
+        }
+
+        /* --- UI CONTAINERS --- */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            border: 4px solid var(--xmas-green);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 400px;
+            max-width: 90%;
+            z-index: 10;
+            display: none; /* Hidden by default */
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #page1 { display: block; } /* Show first page */
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        h1 { font-family: 'Pacifico', cursive; color: var(--xmas-red); margin-top: 0; }
+        p { color: #333; line-height: 1.5; }
+
+        input {
+            padding: 12px;
+            border-radius: 15px;
+            border: 2px solid var(--xmas-green);
+            width: 80%;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            background: var(--xmas-red);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); background: #b21e20; }
+
+        /* --- MINIGAME AREA --- */
+        #game-area {
+            width: 100%;
+            height: 200px;
+            background: #f0fff4;
+            border: 2px dashed var(--xmas-green);
+            position: relative;
+            margin: 15px 0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #target-heart {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        /* --- VIDEO PAGE --- */
+        video {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .vow-text {
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #444;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="heart-box"></div>
+
+    <div class="container" id="page1">
+        <h1>A little christmas surprise for you~❤️</h1>
+        <p>Enter the secret code to open it, IT IS THE DATE ON WHICH IT ALL STARTED... IN THE FORM OF- DAY/MONTH - 0101:</p>
+        <input type="text" id="passcode" placeholder="DDMM">
+        <br>
+        <button class="btn" onclick="checkCode()">Unlock</button>
+    </div>
+
+    <div class="container" id="page2">
+        <h1>Good job! ❤️</h1>
+        <p>You still remember the moment..<br>I have something fun for you..</p>
+        <button class="btn" onclick="showPage('page3'); startGame();">Let's Play!</button>
+    </div>
+
+    <div class="container" id="page3">
+        <h1>Catch the Christmas Love!</h1>
+        <p>Tap the heart 5 times to reveal the gift!</p>
+        <p id="score-text" style="font-weight: bold;">Hearts Caught: 0 / 5</p>
+        <div id="game-area">
+            <div id="target-heart" onclick="catchHeart()">❤️</div>
+        </div>
+    </div>
+
+    <div class="container" id="page4">
+        <h1>Yay! 🎄</h1>
+        <p>I hope you had fun playing the game. Now a very very small thing i made to wrap this surprise up for you~</p>
+        <button class="btn" onclick="showPage('page5')">See the wrap up</button>
+    </div>
+
+    <div class="container" id="page5">
+        <h1>For My Lady ❤️</h1>
+        <video id="myVideo" controls>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <p class="vow-text">
+            "its not much but i hope that it somewhat gives you the idea that my feelings would never fade away, i love you more than i did yesterday.. and its a vow that we will have a future together because there is no other option now, my lady :)"
+        </p>
+    </div>
+
+    <script>
+        // --- CONFIG ---
+        const SECRET_CODE = "0101"; // CHANGE THIS to your date
+        let score = 0;
+
+        // --- BACKGROUND HEARTS GENERATOR ---
+        const heartBox = document.getElementById('heart-box');
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-bg';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.opacity = Math.random();
+            heartBox.appendChild(heart);
+        }
+
+        // --- NAVIGATION ---
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        // --- LOGIC ---
+        function checkCode() {
+            const input = document.getElementById('passcode').value;
+            if (input === SECRET_CODE) {
+                showPage('page2');
+            } else {
+                alert("Incorrect code, try again my love!");
+            }
+        }
+
+        function startGame() {
+            moveHeart();
+        }
+
+        function moveHeart() {
+            const area = document.getElementById('game-area');
+            const heart = document.getElementById('target-heart');
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+        }
+
+        function catchHeart() {
+            score++;
+            document.getElementById('score-text').innerText = `Hearts Caught: ${score} / 5`;
+            if (score >= 5) {
+                showPage('page4');
+            } else {
+                moveHeart();
+            }
+        }
+    </script>
+</body>
+</html>
